@@ -9,6 +9,7 @@ import '../../widgets/app_section_title.dart';
 import '../add_car/add_car_screen.dart';
 import '../car_details/car_details_screen.dart';
 import '../../widgets/app_confirm_dialog.dart';
+import '../../widgets/app_snackbar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -50,6 +51,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (result == true) {
       await _loadCars();
+
+      if (!mounted) return;
+
+      showAppSnackBar(
+        context: context,
+        message: 'Samochód został dodany.',
+      );
     }
   }
 
@@ -68,6 +76,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
     await _repository.deleteCar(id);
     await _loadCars();
+    if (!mounted) return;
+
+    showAppSnackBar(
+      context: context,
+      message: 'Samochód został usunięty.',
+    );
   }
 
   @override

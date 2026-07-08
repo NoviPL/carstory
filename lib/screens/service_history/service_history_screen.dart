@@ -8,6 +8,7 @@ import '../../widgets/app_scaffold.dart';
 import '../../widgets/app_section_title.dart';
 import 'add_service_entry_screen.dart';
 import '../../widgets/app_confirm_dialog.dart';
+import '../../widgets/app_snackbar.dart';
 
 class ServiceHistoryScreen extends StatefulWidget {
   final Car car;
@@ -63,6 +64,12 @@ class _ServiceHistoryScreenState extends State<ServiceHistoryScreen> {
 
     await _repository.deleteEntry(id);
     await _loadEntries();
+    if (!mounted) return;
+
+    showAppSnackBar(
+    context: context,
+    message: 'Wpis został usunięty.',
+    );
   }
 
   @override
@@ -80,7 +87,14 @@ class _ServiceHistoryScreenState extends State<ServiceHistoryScreen> {
 
             if (result == true) {
                 await _loadEntries();
-            }
+
+                if (!mounted) return;
+
+                showAppSnackBar(
+                    context: context,
+                    message: 'Wpis serwisowy został dodany.',
+                );
+                }
             },
         icon: const Icon(Icons.add),
         label: const Text('Wpis'),
