@@ -3,8 +3,8 @@ class Car {
   final String name;
   final String brand;
   final String model;
-  final String year;
-  final String mileage;
+  final int year;
+  final int mileage;
   final String vin;
   final String plateNumber;
   final String createdAt;
@@ -41,8 +41,8 @@ class Car {
       name: map['name'] as String,
       brand: map['brand'] as String,
       model: map['model'] as String,
-      year: map['year'] as String,
-      mileage: map['mileage'] as String,
+      year: map['year'] as int,
+      mileage: map['mileage'] as int,
       vin: map['vin'] as String,
       plateNumber: map['plateNumber'] as String,
       createdAt: map['createdAt'] as String,
