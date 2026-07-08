@@ -6,6 +6,7 @@ import '../../repositories/service_entry_repository.dart';
 import '../../widgets/app_card.dart';
 import '../../widgets/app_scaffold.dart';
 import '../../widgets/app_section_title.dart';
+import 'add_service_entry_screen.dart';
 
 class ServiceHistoryScreen extends StatefulWidget {
   final Car car;
@@ -60,7 +61,18 @@ class _ServiceHistoryScreenState extends State<ServiceHistoryScreen> {
     return AppScaffold(
       title: 'Historia serwisowa',
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () async {
+            final result = await Navigator.push<bool>(
+                context,
+                MaterialPageRoute(
+                builder: (_) => AddServiceEntryScreen(car: widget.car),
+                ),
+            );
+
+            if (result == true) {
+                await _loadEntries();
+            }
+            },
         icon: const Icon(Icons.add),
         label: const Text('Wpis'),
       ),
