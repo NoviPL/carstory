@@ -7,6 +7,7 @@ import '../../widgets/app_card.dart';
 import '../../widgets/app_scaffold.dart';
 import '../../widgets/app_section_title.dart';
 import 'add_service_entry_screen.dart';
+import '../../widgets/app_confirm_dialog.dart';
 
 class ServiceHistoryScreen extends StatefulWidget {
   final Car car;
@@ -51,6 +52,14 @@ class _ServiceHistoryScreenState extends State<ServiceHistoryScreen> {
     final id = entry.id;
 
     if (id == null) return;
+
+    final confirmed = await showAppConfirmDialog(
+        context: context,
+        title: 'Usunąć wpis?',
+        message: 'Ta operacja usunie wpis z historii serwisowej.',
+    );
+
+    if (!confirmed) return;
 
     await _repository.deleteEntry(id);
     await _loadEntries();

@@ -8,6 +8,7 @@ import '../../widgets/app_scaffold.dart';
 import '../../widgets/app_section_title.dart';
 import '../add_car/add_car_screen.dart';
 import '../car_details/car_details_screen.dart';
+import '../../widgets/app_confirm_dialog.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -56,6 +57,14 @@ class _HomeScreenState extends State<HomeScreen> {
     final id = car.id;
 
     if (id == null) return;
+
+    final confirmed = await showAppConfirmDialog(
+      context: context,
+      title: 'Usunąć samochód?',
+      message: 'Ta operacja usunie samochód z aplikacji.',
+    );
+
+    if (!confirmed) return;
 
     await _repository.deleteCar(id);
     await _loadCars();
