@@ -142,7 +142,7 @@ class _ServiceHistoryScreenState extends State<ServiceHistoryScreen> {
                       if (result == true) {
                         await _loadEntries();
 
-                        if (!context.mounted) return;
+                        if (!mounted) return;
 
                         showAppSnackBar(
                           context: context,

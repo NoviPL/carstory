@@ -128,8 +128,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.only(bottom: 12),
                   child: AppCard(
                     onTap: () async {
+                      final currentContext = context;
+
                       final result = await Navigator.push<bool>(
-                        context,
+                        currentContext,
                         MaterialPageRoute(
                           builder: (_) => CarDetailsScreen(car: car),
                         ),
@@ -141,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         if (!mounted) return;
 
                         showAppSnackBar(
-                          context: context,
+                          context: currentContext,
                           message: 'Dane samochodu zostały zaktualizowane.',
                         );
                       }

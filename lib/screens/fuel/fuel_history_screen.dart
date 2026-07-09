@@ -64,7 +64,7 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> {
     if (result == true) {
       await _loadEntries();
 
-      if (!context.mounted) return;
+      if (!mounted) return;
 
       showAppSnackBar(
         context: context,
