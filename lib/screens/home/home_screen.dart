@@ -140,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (result == true) {
                         await _loadCars();
 
-                        if (!mounted) return;
+                        if (!currentContext.mounted) return;
 
                         showAppSnackBar(
                           context: currentContext,
