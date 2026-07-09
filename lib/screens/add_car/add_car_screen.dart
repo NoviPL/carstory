@@ -72,20 +72,34 @@ class _AddCarScreenState extends State<AddCarScreen> {
     return null;
   }
 
+  String? _intValidator(String? value) {
+    final requiredError = _requiredValidator(value);
+    if (requiredError != null) return requiredError;
+
+    final parsed = int.tryParse(value!.trim());
+
+    if (parsed == null || parsed < 0) {
+      return 'Wpisz poprawną liczbę';
+    }
+
+    return null;
+  }
+
   Widget _field({
     required TextEditingController controller,
     required String label,
     TextInputType? keyboardType,
+    String? Function(String?)? validator,
   }) {
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
-      validator: _requiredValidator,
+      validator: validator ?? _requiredValidator,
       decoration: InputDecoration(
         labelText: label,
       ),
     );
-  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -115,12 +129,14 @@ class _AddCarScreenState extends State<AddCarScreen> {
               controller: _yearController,
               label: 'Rok produkcji',
               keyboardType: TextInputType.number,
+              validator: _intValidator,
             ),
             const SizedBox(height: 12),
             _field(
               controller: _mileageController,
               label: 'Przebieg',
               keyboardType: TextInputType.number,
+              validator: _intValidator,
             ),
             const SizedBox(height: 12),
             _field(

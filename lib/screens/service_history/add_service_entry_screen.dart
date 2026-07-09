@@ -50,9 +50,51 @@ class _AddServiceEntryScreenState extends State<AddServiceEntryScreen> {
     super.dispose();
   }
 
+  Future<void> _pickDate() async {
+    final now = DateTime.now();
+
+    final pickedDate = await showDatePicker(
+      context: context,
+      initialDate: now,
+      firstDate: DateTime(1990),
+      lastDate: DateTime(now.year + 5),
+    );
+
+    if (pickedDate == null) return;
+
+    _dateController.text =
+        '${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}';
+  }
+
   String? _requiredValidator(String? value) {
     if (value == null || value.trim().isEmpty) {
       return 'To pole jest wymagane';
+    }
+
+    return null;
+  }
+
+  String? _intValidator(String? value) {
+    final requiredError = _requiredValidator(value);
+    if (requiredError != null) return requiredError;
+
+    final parsed = int.tryParse(value!.trim());
+
+    if (parsed == null || parsed < 0) {
+      return 'Wpisz poprawną liczbę';
+    }
+
+    return null;
+  }
+
+  String? _doubleValidator(String? value) {
+    final requiredError = _requiredValidator(value);
+    if (requiredError != null) return requiredError;
+
+    final parsed = double.tryParse(value!.trim().replaceAll(',', '.'));
+
+    if (parsed == null || parsed < 0) {
+      return 'Wpisz poprawną kwotę';
     }
 
     return null;
@@ -86,21 +128,22 @@ class _AddServiceEntryScreenState extends State<AddServiceEntryScreen> {
   }
 
   Widget _field({
-    required TextEditingController controller,
-    required String label,
-    TextInputType? keyboardType,
-    int maxLines = 1,
-  }) {
-    return TextFormField(
-      controller: controller,
-      keyboardType: keyboardType,
-      maxLines: maxLines,
-      validator: _requiredValidator,
-      decoration: InputDecoration(
-        labelText: label,
-      ),
-    );
-  }
+  required TextEditingController controller,
+  required String label,
+  TextInputType? keyboardType,
+  int maxLines = 1,
+  String? Function(String?)? validator,
+}) {
+  return TextFormField(
+    controller: controller,
+    keyboardType: keyboardType,
+    maxLines: maxLines,
+    validator: validator ?? _requiredValidator,
+    decoration: InputDecoration(
+      labelText: label,
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -126,20 +169,27 @@ class _AddServiceEntryScreenState extends State<AddServiceEntryScreen> {
               controller: _mileageController,
               label: 'Przebieg',
               keyboardType: TextInputType.number,
+              validator: _intValidator,
             ),
             const SizedBox(height: 12),
             _field(
               controller: _costController,
               label: 'Koszt',
               keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
+                decimal: true,              
               ),
+              validator: _doubleValidator,
             ),
             const SizedBox(height: 12),
-            _field(
+            TextFormField(
               controller: _dateController,
-              label: 'Data, np. 2026-07-08',
-              keyboardType: TextInputType.datetime,
+              readOnly: true,
+              validator: _requiredValidator,
+              decoration: const InputDecoration(
+                labelText: 'Data',
+                suffixIcon: Icon(Icons.calendar_today),
+              ),
+              onTap: _pickDate,
             ),
             const SizedBox(height: 24),
             AppButton(
