@@ -6,6 +6,7 @@ import '../../widgets/app_scaffold.dart';
 import '../../widgets/app_section_title.dart';
 import '../add_car/add_car_screen.dart';
 import '../service_history/service_history_screen.dart';
+import '../fuel/fuel_history_screen.dart';
 
 class CarDetailsScreen extends StatefulWidget {
   final Car car;
@@ -161,6 +162,14 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
             icon: Icons.local_gas_station,
             title: 'Tankowania',
             subtitle: 'Spalanie, koszty paliwa i przebieg.',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => FuelHistoryScreen(car: car),
+                ),
+              );
+            },
           ),
           const SizedBox(height: 12),
           _moduleTile(
