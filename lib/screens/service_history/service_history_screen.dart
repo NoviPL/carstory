@@ -9,6 +9,7 @@ import '../../widgets/app_section_title.dart';
 import 'add_service_entry_screen.dart';
 import '../../widgets/app_confirm_dialog.dart';
 import '../../widgets/app_snackbar.dart';
+import '../../widgets/app_empty_state.dart';
 
 class ServiceHistoryScreen extends StatefulWidget {
   final Car car;
@@ -117,27 +118,10 @@ class _ServiceHistoryScreenState extends State<ServiceHistoryScreen> {
                 ),
               )
             else if (_entries.isEmpty)
-              AppCard(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(
-                      Icons.build,
-                      size: 42,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      'Brak wpisów serwisowych',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Dodaj pierwszy wpis, np. wymianę oleju, przegląd lub naprawę.',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ],
-                ),
+              const AppEmptyState(
+                icon: Icons.build,
+                title: 'Brak wpisów serwisowych',
+                message: 'Dodaj pierwszy wpis, np. wymianę oleju, przegląd lub naprawę.',
               )
             else
               ..._entries.map(

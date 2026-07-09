@@ -10,6 +10,7 @@ import '../add_car/add_car_screen.dart';
 import '../car_details/car_details_screen.dart';
 import '../../widgets/app_confirm_dialog.dart';
 import '../../widgets/app_snackbar.dart';
+import '../../widgets/app_empty_state.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -111,32 +112,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               )
             else if (_cars.isEmpty)
-              AppCard(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(
-                      Icons.directions_car,
-                      size: 42,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      'Brak dodanych samochodów',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Dodaj pierwszy pojazd i zacznij prowadzić jego historię serwisową.',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    const SizedBox(height: 16),
-                    AppButton(
-                      text: 'Dodaj samochód',
-                      icon: Icons.add,
-                      onPressed: _openAddCarScreen,
-                    ),
-                  ],
+              AppEmptyState(
+                icon: Icons.directions_car,
+                title: 'Brak dodanych samochodów',
+                message: 'Dodaj pierwszy pojazd i zacznij prowadzić jego historię serwisową.',
+                action: AppButton(
+                  text: 'Dodaj samochód',
+                  icon: Icons.add,
+                  onPressed: _openAddCarScreen,
                 ),
               )
             else
