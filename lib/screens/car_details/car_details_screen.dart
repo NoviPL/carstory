@@ -4,15 +4,29 @@ import '../../models/car.dart';
 import '../../widgets/app_card.dart';
 import '../../widgets/app_scaffold.dart';
 import '../../widgets/app_section_title.dart';
+import '../add_car/add_car_screen.dart';
 import '../service_history/service_history_screen.dart';
 
-class CarDetailsScreen extends StatelessWidget {
+class CarDetailsScreen extends StatefulWidget {
   final Car car;
 
   const CarDetailsScreen({
     super.key,
     required this.car,
   });
+
+  @override
+  State<CarDetailsScreen> createState() => _CarDetailsScreenState();
+}
+
+class _CarDetailsScreenState extends State<CarDetailsScreen> {
+  late Car car;
+
+  @override
+  void initState() {
+    super.initState();
+    car = widget.car;
+  }
 
   Widget _infoRow(String label, String value) {
     return Padding(
@@ -73,10 +87,29 @@ class CarDetailsScreen extends StatelessWidget {
     );
   }
 
+  Future<void> _editCar() async {
+    final result = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => AddCarScreen(car: car),
+      ),
+    );
+
+    if (result == true && mounted) {
+      Navigator.pop(context, true);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
       title: car.name,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.edit),
+          onPressed: _editCar,
+        ),
+      ],
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -109,18 +142,18 @@ class CarDetailsScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           _moduleTile(
-          context: context,
-          icon: Icons.build,
-          title: 'Historia serwisowa',
-          subtitle: 'Naprawy, przeglądy, części i notatki.',
-          onTap: () {
+            context: context,
+            icon: Icons.build,
+            title: 'Historia serwisowa',
+            subtitle: 'Naprawy, przeglądy, części i notatki.',
+            onTap: () {
               Navigator.push(
-              context,
-              MaterialPageRoute(
+                context,
+                MaterialPageRoute(
                   builder: (_) => ServiceHistoryScreen(car: car),
-              ),
+                ),
               );
-          },
+            },
           ),
           const SizedBox(height: 12),
           _moduleTile(

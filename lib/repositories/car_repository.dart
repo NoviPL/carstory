@@ -11,6 +11,17 @@ class CarRepository {
     );
   }
 
+  Future<void> updateCar(Car car) async {
+    final db = await AppDatabase.database;
+
+    await db.update(
+      'cars',
+      car.toMap(),
+      where: 'id = ?',
+      whereArgs: [car.id],
+    );
+  }
+
   Future<List<Car>> getCars() async {
     final db = await AppDatabase.database;
 

@@ -6,7 +6,12 @@ import '../../widgets/app_button.dart';
 import '../../widgets/app_scaffold.dart';
 
 class AddCarScreen extends StatefulWidget {
-  const AddCarScreen({super.key});
+  final Car? car;
+
+  const AddCarScreen({
+    super.key,
+    this.car,
+  });
 
   @override
   State<AddCarScreen> createState() => _AddCarScreenState();
@@ -26,6 +31,23 @@ class _AddCarScreenState extends State<AddCarScreen> {
   final _repository = CarRepository();
 
   bool _isSaving = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final car = widget.car;
+
+    if (car != null) {
+      _nameController.text = car.name;
+      _brandController.text = car.brand;
+      _modelController.text = car.model;
+      _yearController.text = car.year.toString();
+      _mileageController.text = car.mileage.toString();
+      _vinController.text = car.vin;
+      _plateController.text = car.plateNumber;
+    }
+  }
 
   @override
   void dispose() {
@@ -57,7 +79,23 @@ class _AddCarScreenState extends State<AddCarScreen> {
       createdAt: DateTime.now().toIso8601String(),
     );
 
-    await _repository.insertCar(car);
+    if (widget.car == null) {
+      await _repository.insertCar(car);
+    } else {
+      await _repository.updateCar(
+        Car(
+          id: widget.car!.id,
+          name: car.name,
+          brand: car.brand,
+          model: car.model,
+          year: car.year,
+          mileage: car.mileage,
+          vin: car.vin,
+          plateNumber: car.plateNumber,
+          createdAt: widget.car!.createdAt,
+        ),
+      );
+    }
 
     if (!mounted) return;
 
@@ -104,7 +142,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      title: 'Dodaj samochód',
+      title: widget.car == null ? 'Dodaj samochód' : 'Edytuj samochód',
       body: Form(
         key: _formKey,
         child: ListView(
@@ -150,7 +188,11 @@ class _AddCarScreenState extends State<AddCarScreen> {
             ),
             const SizedBox(height: 24),
             AppButton(
-              text: _isSaving ? 'Zapisywanie...' : 'Zapisz samochód',
+              text: _isSaving
+                ? 'Zapisywanie...'
+                : widget.car == null
+                    ? 'Zapisz samochód'
+                    : 'Zapisz zmiany',
               icon: Icons.save,
               onPressed: _isSaving ? null : _saveCar,
             ),

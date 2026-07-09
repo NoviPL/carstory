@@ -11,6 +11,17 @@ class ServiceEntryRepository {
     );
   }
 
+  Future<void> updateEntry(ServiceEntry entry) async {
+    final db = await AppDatabase.database;
+
+    await db.update(
+      'service_entries',
+      entry.toMap(),
+      where: 'id = ?',
+      whereArgs: [entry.id],
+    );
+  }
+
   Future<List<ServiceEntry>> getEntriesForCar(int carId) async {
     final db = await AppDatabase.database;
 

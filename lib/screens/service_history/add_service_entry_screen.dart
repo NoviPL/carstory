@@ -8,10 +8,12 @@ import '../../widgets/app_scaffold.dart';
 
 class AddServiceEntryScreen extends StatefulWidget {
   final Car car;
+  final ServiceEntry? entry;
 
   const AddServiceEntryScreen({
     super.key,
     required this.car,
+    this.entry,
   });
 
   @override
@@ -38,6 +40,16 @@ class _AddServiceEntryScreenState extends State<AddServiceEntryScreen> {
     final now = DateTime.now();
     _dateController.text =
         '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+
+    final entry = widget.entry;
+
+    if (entry != null) {
+      _titleController.text = entry.title;
+      _descriptionController.text = entry.description;
+      _mileageController.text = entry.mileage.toString();
+      _costController.text = entry.cost.toStringAsFixed(2);
+      _dateController.text = entry.date;
+    }
   }
 
   @override
@@ -120,7 +132,22 @@ class _AddServiceEntryScreenState extends State<AddServiceEntryScreen> {
       createdAt: DateTime.now().toIso8601String(),
     );
 
-    await _repository.insertEntry(entry);
+    if (widget.entry == null) {
+      await _repository.insertEntry(entry);
+    } else {
+      await _repository.updateEntry(
+        ServiceEntry(
+          id: widget.entry!.id,
+          carId: entry.carId,
+          title: entry.title,
+          description: entry.description,
+          mileage: entry.mileage,
+          cost: entry.cost,
+          date: entry.date,
+          createdAt: widget.entry!.createdAt,
+        ),
+      );
+    }
 
     if (!mounted) return;
 
@@ -148,7 +175,7 @@ class _AddServiceEntryScreenState extends State<AddServiceEntryScreen> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      title: 'Nowy wpis serwisowy',
+      title: widget.entry == null ? 'Nowy wpis serwisowy' : 'Edytuj wpis',
       body: Form(
         key: _formKey,
         child: ListView(
@@ -193,7 +220,11 @@ class _AddServiceEntryScreenState extends State<AddServiceEntryScreen> {
             ),
             const SizedBox(height: 24),
             AppButton(
-              text: _isSaving ? 'Zapisywanie...' : 'Zapisz wpis',
+              text: _isSaving
+                ? 'Zapisywanie...'
+                : widget.entry == null
+                    ? 'Zapisz wpis'
+                    : 'Zapisz zmiany',
               icon: Icons.save,
               onPressed: _isSaving ? null : _saveEntry,
             ),

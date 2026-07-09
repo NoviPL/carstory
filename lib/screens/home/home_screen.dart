@@ -127,28 +127,70 @@ class _HomeScreenState extends State<HomeScreen> {
                 (car) => Padding(
                   padding: const EdgeInsets.only(bottom: 12),
                   child: AppCard(
-                    onTap: () {
-                      Navigator.push(
+                    onTap: () async {
+                      final result = await Navigator.push<bool>(
                         context,
                         MaterialPageRoute(
                           builder: (_) => CarDetailsScreen(car: car),
                         ),
                       );
+
+                      if (result == true) {
+                        await _loadCars();
+
+                        if (!mounted) return;
+
+                        showAppSnackBar(
+                          context: context,
+                          message: 'Dane samochodu zostały zaktualizowane.',
+                        );
+                      }
                     },
-                    child: ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: Icon(
-                        Icons.directions_car,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      title: Text(car.name),
-                      subtitle: Text(
-                        '${car.brand} ${car.model} • ${car.year} • ${car.mileage} km',
-                      ),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete_outline),
-                        onPressed: () => _deleteCar(car),
-                      ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 54,
+                          height: 54,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.14),
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                          child: Icon(
+                            Icons.directions_car,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                car.name,
+                                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                '${car.brand} ${car.model} • ${car.year}',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                '${car.mileage} km',
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete_outline),
+                          onPressed: () => _deleteCar(car),
+                        ),
+                      ],
                     ),
                   ),
                 ),

@@ -128,20 +128,73 @@ class _ServiceHistoryScreenState extends State<ServiceHistoryScreen> {
                 (entry) => Padding(
                   padding: const EdgeInsets.only(bottom: 12),
                   child: AppCard(
-                    child: ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: Icon(
-                        Icons.build_circle,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      title: Text(entry.title),
-                      subtitle: Text(
-                        '${entry.date} • ${entry.mileage} km • ${entry.cost.toStringAsFixed(2)} zł',
-                      ),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete_outline),
-                        onPressed: () => _deleteEntry(entry),
-                      ),
+                    onTap: () async {
+                      final result = await Navigator.push<bool>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => AddServiceEntryScreen(
+                            car: widget.car,
+                            entry: entry,
+                          ),
+                        ),
+                      );
+
+                      if (result == true) {
+                        await _loadEntries();
+
+                        if (!context.mounted) return;
+
+                        showAppSnackBar(
+                          context: context,
+                          message: 'Wpis został zaktualizowany.',
+                        );
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 54,
+                          height: 54,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.14),
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                          child: Icon(
+                            Icons.build,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                entry.title,
+                                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                entry.date,
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                '${entry.mileage} km • ${entry.cost.toStringAsFixed(2)} zł',
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete_outline),
+                          onPressed: () => _deleteEntry(entry),
+                        ),
+                      ],
                     ),
                   ),
                 ),
