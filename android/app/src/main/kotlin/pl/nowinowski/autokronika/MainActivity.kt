@@ -1,4 +1,4 @@
-package com.example.carstory
+package pl.nowinowski.autokronika
 
 import io.flutter.embedding.android.FlutterActivity
 
