@@ -50,6 +50,77 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> {
     });
   }
 
+  double get _totalFuelCost {
+    return _entries.fold(
+      0,
+      (sum, entry) => sum + entry.totalCost,
+    );
+  }
+
+  double get _totalLiters {
+    return _entries.fold(
+      0,
+      (sum, entry) => sum + entry.liters,
+    );
+  }
+
+  double get _averagePricePerLiter {
+    if (_totalLiters == 0) return 0;
+
+    return _totalFuelCost / _totalLiters;
+  }
+
+  double get _averageFuelConsumption {
+    if (_entries.length < 2) return 0;
+
+    final sortedEntries = [..._entries]
+      ..sort((a, b) {
+        final mileageComparison = a.mileage.compareTo(b.mileage);
+
+        if (mileageComparison != 0) {
+          return mileageComparison;
+        }
+
+        return a.date.compareTo(b.date);
+      });
+
+    int? previousFullTankMileage;
+    double litersSinceFullTank = 0;
+    double calculatedLiters = 0;
+    int calculatedDistance = 0;
+
+    for (final entry in sortedEntries) {
+      if (previousFullTankMileage == null) {
+        if (entry.isFullTank) {
+          previousFullTankMileage = entry.mileage;
+          litersSinceFullTank = 0;
+        }
+
+        continue;
+      }
+
+      litersSinceFullTank += entry.liters;
+
+      if (!entry.isFullTank) {
+        continue;
+      }
+
+      final distance = entry.mileage - previousFullTankMileage;
+
+      if (distance > 0) {
+        calculatedDistance += distance;
+        calculatedLiters += litersSinceFullTank;
+      }
+
+      previousFullTankMileage = entry.mileage;
+      litersSinceFullTank = 0;
+    }
+
+    if (calculatedDistance == 0) return 0;
+
+    return calculatedLiters / calculatedDistance * 100;
+  }
+
   Future<void> _openAddFuelEntryScreen({FuelEntry? entry}) async {
     final result = await Navigator.push<bool>(
       context,
@@ -99,6 +170,40 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> {
     );
   }
 
+  Widget _statItem({
+    required BuildContext context,
+    required IconData icon,
+    required String label,
+    required String value,
+  }) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            icon,
+            size: 22,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            value,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          const SizedBox(height: 3),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
@@ -118,6 +223,82 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> {
               subtitle: 'Historia tankowań i kosztów paliwa.',
             ),
             const SizedBox(height: 20),
+            if (!_isLoading && _entries.isNotEmpty) ...[
+              AppCard(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Podsumowanie',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        _statItem(
+                          context: context,
+                          icon: Icons.payments_outlined,
+                          label: 'Łączny koszt',
+                          value: '${_totalFuelCost.toStringAsFixed(2)} zł',
+                        ),
+                        const SizedBox(width: 16),
+                        _statItem(
+                          context: context,
+                          icon: Icons.local_gas_station_outlined,
+                          label: 'Łącznie paliwa',
+                          value: '${_totalLiters.toStringAsFixed(2)} l',
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 22),
+                    Row(
+                      children: [
+                        _statItem(
+                          context: context,
+                          icon: Icons.show_chart,
+                          label: 'Średnia cena',
+                          value:
+                              '${_averagePricePerLiter.toStringAsFixed(2)} zł/l',
+                        ),
+                        const SizedBox(width: 16),
+                        _statItem(
+                          context: context,
+                          icon: Icons.receipt_long_outlined,
+                          label: 'Tankowania',
+                          value: _entries.length.toString(),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 22),
+                    Row(
+                      children: [
+                        _statItem(
+                          context: context,
+                          icon: Icons.speed,
+                          label: 'Średnie spalanie',
+                          value: _averageFuelConsumption == 0
+                              ? 'Brak danych'
+                              : '${_averageFuelConsumption.toStringAsFixed(2)} l/100 km',
+                        ),
+                        const SizedBox(width: 16),
+                        _statItem(
+                          context: context,
+                          icon: Icons.check_circle_outline,
+                          label: 'Pełne tankowania',
+                          value: _entries
+                              .where((entry) => entry.isFullTank)
+                              .length
+                              .toString(),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
             if (_isLoading)
               const Center(
                 child: Padding(
@@ -183,6 +364,16 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> {
                                           .onSurfaceVariant,
                                     ),
                               ),
+                              if (entry.isFullTank) ...[
+                                const SizedBox(height: 5),
+                                Text(
+                                  'Tankowanie do pełna',
+                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                        color: Theme.of(context).colorScheme.primary,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                ),
+                              ],
                             ],
                           ),
                         ),

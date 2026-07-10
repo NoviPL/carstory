@@ -70,7 +70,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final confirmed = await showAppConfirmDialog(
       context: context,
       title: 'Usunąć samochód?',
-      message: 'Ta operacja usunie samochód z aplikacji.',
+      message:
+        'Samochód oraz jego historia serwisowa i tankowania zostaną trwale usunięte.',
     );
 
     if (!confirmed) return;

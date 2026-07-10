@@ -7,6 +7,7 @@ class FuelEntry {
   final double totalCost;
   final String date;
   final String createdAt;
+  final bool isFullTank;
 
   const FuelEntry({
     this.id,
@@ -17,6 +18,7 @@ class FuelEntry {
     required this.totalCost,
     required this.date,
     required this.createdAt,
+    required this.isFullTank,
   });
 
   Map<String, Object?> toMap() {
@@ -29,6 +31,7 @@ class FuelEntry {
       'totalCost': totalCost,
       'date': date,
       'createdAt': createdAt,
+      'isFullTank': isFullTank ? 1 : 0,
     };
   }
 
@@ -42,6 +45,7 @@ class FuelEntry {
       totalCost: (map['totalCost'] as num).toDouble(),
       date: map['date'] as String,
       createdAt: map['createdAt'] as String,
+      isFullTank: (map['isFullTank'] as int? ?? 1) == 1,
     );
   }
 }

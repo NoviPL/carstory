@@ -5,6 +5,7 @@ import '../../models/service_entry.dart';
 import '../../repositories/service_entry_repository.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/app_scaffold.dart';
+import '../../repositories/car_repository.dart';
 
 class AddServiceEntryScreen extends StatefulWidget {
   final Car car;
@@ -30,6 +31,7 @@ class _AddServiceEntryScreenState extends State<AddServiceEntryScreen> {
   final _dateController = TextEditingController();
 
   final _repository = ServiceEntryRepository();
+  final _carRepository = CarRepository();
 
   bool _isSaving = false;
 
@@ -148,6 +150,11 @@ class _AddServiceEntryScreenState extends State<AddServiceEntryScreen> {
         ),
       );
     }
+
+    await _carRepository.updateMileageIfHigher(
+      carId: carId,
+      mileage: entry.mileage,
+    );
 
     if (!mounted) return;
 

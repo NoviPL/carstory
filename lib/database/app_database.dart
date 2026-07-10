@@ -2,7 +2,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class AppDatabase {
-  static const int _databaseVersion = 3;
+  static const int _databaseVersion = 4;
   static const String _databaseName = 'carstory.db';
 
   static Database? _database;
@@ -49,6 +49,12 @@ class AppDatabase {
     if (oldVersion < 3) {
       await _createFuelEntriesTable(db);
     }
+    if (oldVersion < 4) {
+      await db.execute(
+        'ALTER TABLE fuel_entries '
+        'ADD COLUMN isFullTank INTEGER NOT NULL DEFAULT 1',
+      );
+    }
   }
 
   static Future<void> _createCarsTable(Database db) async {
@@ -92,7 +98,8 @@ class AppDatabase {
         pricePerLiter REAL NOT NULL,
         totalCost REAL NOT NULL,
         date TEXT NOT NULL,
-        createdAt TEXT NOT NULL
+        createdAt TEXT NOT NULL,
+        isFullTank INTEGER NOT NULL DEFAULT 1
       )
     ''');
   }

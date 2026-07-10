@@ -6,6 +6,7 @@ import '../../repositories/fuel_entry_repository.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/app_card.dart';
 import '../../widgets/app_scaffold.dart';
+import '../../repositories/car_repository.dart';
 
 class AddFuelEntryScreen extends StatefulWidget {
   final Car car;
@@ -30,7 +31,9 @@ class _AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
   final _dateController = TextEditingController();
 
   final _repository = FuelEntryRepository();
+  final _carRepository = CarRepository();
 
+  bool _isFullTank = true;
   bool _isSaving = false;
   double _totalCost = 0;
 
@@ -52,6 +55,7 @@ class _AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
           entry.pricePerLiter.toStringAsFixed(2);
       _dateController.text = entry.date;
       _totalCost = entry.totalCost;
+      _isFullTank = entry.isFullTank;
     }
 
     _litersController.addListener(_calculateTotalCost);
@@ -192,6 +196,7 @@ class _AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
       date: _dateController.text.trim(),
       createdAt:
           existingEntry?.createdAt ?? DateTime.now().toIso8601String(),
+      isFullTank: _isFullTank,
     );
 
     if (existingEntry == null) {
@@ -199,6 +204,11 @@ class _AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
     } else {
       await _repository.updateEntry(entry);
     }
+
+    await _carRepository.updateMileageIfHigher(
+      carId: carId,
+      mileage: mileage,
+    );
 
     if (!mounted) return;
 
@@ -273,6 +283,20 @@ class _AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
               ),
             ),
             const SizedBox(height: 20),
+            SwitchListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+              title: const Text('Tankowanie do pełna'),
+              subtitle: const Text(
+                'Pełne tankowania są używane do obliczania średniego spalania.',
+              ),
+              value: _isFullTank,
+              onChanged: (value) {
+                setState(() {
+                  _isFullTank = value;
+                });
+              },
+            ),
+            const SizedBox(height: 12),
             AppCard(
               child: Row(
                 children: [

@@ -36,10 +36,40 @@ class CarRepository {
   Future<void> deleteCar(int id) async {
     final db = await AppDatabase.database;
 
-    await db.delete(
-      'cars',
-      where: 'id = ?',
-      whereArgs: [id],
+    await db.transaction((transaction) async {
+      await transaction.delete(
+        'service_entries',
+        where: 'carId = ?',
+        whereArgs: [id],
+      );
+
+      await transaction.delete(
+        'fuel_entries',
+        where: 'carId = ?',
+        whereArgs: [id],
+      );
+
+      await transaction.delete(
+        'cars',
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+    });
+  }
+
+  Future<void> updateMileageIfHigher({
+    required int carId,
+    required int mileage,
+  }) async {
+    final db = await AppDatabase.database;
+
+    await db.rawUpdate(
+      '''
+      UPDATE cars
+      SET mileage = ?
+      WHERE id = ? AND mileage < ?
+      ''',
+      [mileage, carId, mileage],
     );
   }
 }
