@@ -37,9 +37,9 @@ class FuelEntry {
       id: map['id'] as int?,
       carId: map['carId'] as int,
       mileage: map['mileage'] as int,
-      liters: map['liters'] as double,
-      pricePerLiter: map['pricePerLiter'] as double,
-      totalCost: map['totalCost'] as double,
+      liters: (map['liters'] as num).toDouble(),
+      pricePerLiter: (map['pricePerLiter'] as num).toDouble(),
+      totalCost: (map['totalCost'] as num).toDouble(),
       date: map['date'] as String,
       createdAt: map['createdAt'] as String,
     );
