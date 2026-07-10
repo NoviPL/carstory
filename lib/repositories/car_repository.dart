@@ -50,6 +50,18 @@ class CarRepository {
       );
 
       await transaction.delete(
+        'expense_entries',
+        where: 'carId = ?',
+        whereArgs: [id],
+      );
+
+      await transaction.delete(
+        'reminders',
+        where: 'carId = ?',
+        whereArgs: [id],
+      );
+
+      await transaction.delete(
         'cars',
         where: 'id = ?',
         whereArgs: [id],

@@ -2,7 +2,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class AppDatabase {
-  static const int _databaseVersion = 4;
+  static const int _databaseVersion = 6;
   static const String _databaseName = 'carstory.db';
 
   static Database? _database;
@@ -36,6 +36,8 @@ class AppDatabase {
     await _createCarsTable(db);
     await _createServiceEntriesTable(db);
     await _createFuelEntriesTable(db);
+    await _createExpenseEntriesTable(db);
+    await _createRemindersTable(db);
   }
 
   static Future<void> _upgradeDatabase(
@@ -54,6 +56,12 @@ class AppDatabase {
         'ALTER TABLE fuel_entries '
         'ADD COLUMN isFullTank INTEGER NOT NULL DEFAULT 1',
       );
+    }
+    if (oldVersion < 5) {
+      await _createExpenseEntriesTable(db);
+    }
+    if (oldVersion < 6) {
+      await _createRemindersTable(db);
     }
   }
 
@@ -100,6 +108,35 @@ class AppDatabase {
         date TEXT NOT NULL,
         createdAt TEXT NOT NULL,
         isFullTank INTEGER NOT NULL DEFAULT 1
+      )
+    ''');
+  }
+  static Future<void> _createExpenseEntriesTable(Database db) async {
+    await db.execute('''
+      CREATE TABLE expense_entries (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        carId INTEGER NOT NULL,
+        title TEXT NOT NULL,
+        category TEXT NOT NULL,
+        amount REAL NOT NULL,
+        date TEXT NOT NULL,
+        note TEXT NOT NULL,
+        createdAt TEXT NOT NULL
+      )
+    ''');
+  }
+  static Future<void> _createRemindersTable(Database db) async {
+    await db.execute('''
+      CREATE TABLE reminders (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        carId INTEGER NOT NULL,
+        title TEXT NOT NULL,
+        type TEXT NOT NULL,
+        dueDate TEXT,
+        dueMileage INTEGER,
+        note TEXT NOT NULL,
+        isCompleted INTEGER NOT NULL DEFAULT 0,
+        createdAt TEXT NOT NULL
       )
     ''');
   }

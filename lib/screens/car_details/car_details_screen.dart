@@ -7,6 +7,8 @@ import '../../widgets/app_section_title.dart';
 import '../add_car/add_car_screen.dart';
 import '../service_history/service_history_screen.dart';
 import '../fuel/fuel_history_screen.dart';
+import '../expenses/expenses_screen.dart';
+import '../reminders/reminders_screen.dart';
 
 class CarDetailsScreen extends StatefulWidget {
   final Car car;
@@ -177,6 +179,14 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
             icon: Icons.payments,
             title: 'Koszty',
             subtitle: 'Wydatki związane z pojazdem.',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ExpensesScreen(car: car),
+                ),
+              );
+            },
           ),
           const SizedBox(height: 12),
           _moduleTile(
@@ -191,6 +201,14 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
             icon: Icons.notifications_active,
             title: 'Przypomnienia',
             subtitle: 'OC, przegląd, olej i własne terminy.',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => RemindersScreen(car: car),
+                ),
+              );
+            },
           ),
           const SizedBox(height: 12),
           _moduleTile(
