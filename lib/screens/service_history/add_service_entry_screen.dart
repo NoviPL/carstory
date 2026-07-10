@@ -11,11 +11,7 @@ class AddServiceEntryScreen extends StatefulWidget {
   final Car car;
   final ServiceEntry? entry;
 
-  const AddServiceEntryScreen({
-    super.key,
-    required this.car,
-    this.entry,
-  });
+  const AddServiceEntryScreen({super.key, required this.car, this.entry});
 
   @override
   State<AddServiceEntryScreen> createState() => _AddServiceEntryScreenState();
@@ -162,22 +158,20 @@ class _AddServiceEntryScreenState extends State<AddServiceEntryScreen> {
   }
 
   Widget _field({
-  required TextEditingController controller,
-  required String label,
-  TextInputType? keyboardType,
-  int maxLines = 1,
-  String? Function(String?)? validator,
-}) {
-  return TextFormField(
-    controller: controller,
-    keyboardType: keyboardType,
-    maxLines: maxLines,
-    validator: validator ?? _requiredValidator,
-    decoration: InputDecoration(
-      labelText: label,
-    ),
-  );
-}
+    required TextEditingController controller,
+    required String label,
+    TextInputType? keyboardType,
+    int maxLines = 1,
+    String? Function(String?)? validator,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      maxLines: maxLines,
+      validator: validator ?? _requiredValidator,
+      decoration: InputDecoration(labelText: label),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -210,7 +204,7 @@ class _AddServiceEntryScreenState extends State<AddServiceEntryScreen> {
               controller: _costController,
               label: 'Koszt',
               keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,              
+                decimal: true,
               ),
               validator: _doubleValidator,
             ),
@@ -228,10 +222,10 @@ class _AddServiceEntryScreenState extends State<AddServiceEntryScreen> {
             const SizedBox(height: 24),
             AppButton(
               text: _isSaving
-                ? 'Zapisywanie...'
-                : widget.entry == null
-                    ? 'Zapisz wpis'
-                    : 'Zapisz zmiany',
+                  ? 'Zapisywanie...'
+                  : widget.entry == null
+                  ? 'Zapisz wpis'
+                  : 'Zapisz zmiany',
               icon: Icons.save,
               onPressed: _isSaving ? null : _saveEntry,
             ),

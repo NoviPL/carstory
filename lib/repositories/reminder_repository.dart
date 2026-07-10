@@ -5,10 +5,7 @@ class ReminderRepository {
   Future<int> insertReminder(CarReminder reminder) async {
     final db = await AppDatabase.database;
 
-    return db.insert(
-      'reminders',
-      reminder.toMap(),
-    );
+    return db.insert('reminders', reminder.toMap());
   }
 
   Future<void> updateReminder(CarReminder reminder) async {
@@ -43,9 +40,7 @@ class ReminderRepository {
 
     await db.update(
       'reminders',
-      {
-        'isCompleted': isCompleted ? 1 : 0,
-      },
+      {'isCompleted': isCompleted ? 1 : 0},
       where: 'id = ?',
       whereArgs: [id],
     );
@@ -54,10 +49,6 @@ class ReminderRepository {
   Future<void> deleteReminder(int id) async {
     final db = await AppDatabase.database;
 
-    await db.delete(
-      'reminders',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    await db.delete('reminders', where: 'id = ?', whereArgs: [id]);
   }
 }

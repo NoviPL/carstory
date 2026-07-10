@@ -11,6 +11,7 @@ import '../car_details/car_details_screen.dart';
 import '../../widgets/app_confirm_dialog.dart';
 import '../../widgets/app_snackbar.dart';
 import '../../widgets/app_empty_state.dart';
+import '../../widgets/car_cover_thumbnail.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -45,9 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _openAddCarScreen() async {
     final result = await Navigator.push<bool>(
       context,
-      MaterialPageRoute(
-        builder: (_) => const AddCarScreen(),
-      ),
+      MaterialPageRoute(builder: (_) => const AddCarScreen()),
     );
 
     if (result == true) {
@@ -55,10 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       if (!mounted) return;
 
-      showAppSnackBar(
-        context: context,
-        message: 'Samochód został dodany.',
-      );
+      showAppSnackBar(context: context, message: 'Samochód został dodany.');
     }
   }
 
@@ -71,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       title: 'Usunąć samochód?',
       message:
-        'Samochód oraz jego historia serwisowa i tankowania zostaną trwale usunięte.',
+          'Samochód oraz jego historia serwisowa i tankowania zostaną trwale usunięte.',
     );
 
     if (!confirmed) return;
@@ -80,10 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
     await _loadCars();
     if (!mounted) return;
 
-    showAppSnackBar(
-      context: context,
-      message: 'Samochód został usunięty.',
-    );
+    showAppSnackBar(context: context, message: 'Samochód został usunięty.');
   }
 
   @override
@@ -116,7 +109,8 @@ class _HomeScreenState extends State<HomeScreen> {
               AppEmptyState(
                 icon: Icons.directions_car,
                 title: 'Brak dodanych samochodów',
-                message: 'Dodaj pierwszy pojazd i zacznij prowadzić jego historię serwisową.',
+                message:
+                    'Dodaj pierwszy pojazd i zacznij prowadzić jego historię serwisową.',
                 action: AppButton(
                   text: 'Dodaj samochód',
                   icon: Icons.add,
@@ -151,18 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     child: Row(
                       children: [
-                        Container(
-                          width: 54,
-                          height: 54,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.14),
-                            borderRadius: BorderRadius.circular(18),
-                          ),
-                          child: Icon(
-                            Icons.directions_car,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
+                        CarCoverThumbnail(carId: car.id),
                         const SizedBox(width: 14),
                         Expanded(
                           child: Column(
@@ -170,9 +153,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               Text(
                                 car.name,
-                                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                style: Theme.of(context).textTheme.titleMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 4),
                               Text(
@@ -182,8 +164,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               const SizedBox(height: 4),
                               Text(
                                 '${car.mileage} km',
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                style: Theme.of(context).textTheme.bodySmall
+                                    ?.copyWith(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurfaceVariant,
                                     ),
                               ),
                             ],

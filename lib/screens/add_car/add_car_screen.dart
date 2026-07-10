@@ -8,10 +8,7 @@ import '../../widgets/app_scaffold.dart';
 class AddCarScreen extends StatefulWidget {
   final Car? car;
 
-  const AddCarScreen({
-    super.key,
-    this.car,
-  });
+  const AddCarScreen({super.key, this.car});
 
   @override
   State<AddCarScreen> createState() => _AddCarScreenState();
@@ -133,11 +130,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
       controller: controller,
       keyboardType: keyboardType,
       validator: validator ?? _requiredValidator,
-      decoration: InputDecoration(
-        labelText: label,
-      ),
+      decoration: InputDecoration(labelText: label),
     );
-}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,15 +148,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
               label: 'Nazwa auta, np. Moje BMW',
             ),
             const SizedBox(height: 12),
-            _field(
-              controller: _brandController,
-              label: 'Marka',
-            ),
+            _field(controller: _brandController, label: 'Marka'),
             const SizedBox(height: 12),
-            _field(
-              controller: _modelController,
-              label: 'Model',
-            ),
+            _field(controller: _modelController, label: 'Model'),
             const SizedBox(height: 12),
             _field(
               controller: _yearController,
@@ -177,22 +166,16 @@ class _AddCarScreenState extends State<AddCarScreen> {
               validator: _intValidator,
             ),
             const SizedBox(height: 12),
-            _field(
-              controller: _vinController,
-              label: 'VIN',
-            ),
+            _field(controller: _vinController, label: 'VIN'),
             const SizedBox(height: 12),
-            _field(
-              controller: _plateController,
-              label: 'Numer rejestracyjny',
-            ),
+            _field(controller: _plateController, label: 'Numer rejestracyjny'),
             const SizedBox(height: 24),
             AppButton(
               text: _isSaving
-                ? 'Zapisywanie...'
-                : widget.car == null
-                    ? 'Zapisz samochód'
-                    : 'Zapisz zmiany',
+                  ? 'Zapisywanie...'
+                  : widget.car == null
+                  ? 'Zapisz samochód'
+                  : 'Zapisz zmiany',
               icon: Icons.save,
               onPressed: _isSaving ? null : _saveCar,
             ),

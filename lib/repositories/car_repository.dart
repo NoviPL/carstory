@@ -1,40 +1,31 @@
 import '../database/app_database.dart';
 import '../models/car.dart';
+import '../services/photo_storage_service.dart';
 
 class CarRepository {
   Future<int> insertCar(Car car) async {
     final db = await AppDatabase.database;
 
-    return db.insert(
-      'cars',
-      car.toMap(),
-    );
+    return db.insert('cars', car.toMap());
   }
 
   Future<void> updateCar(Car car) async {
     final db = await AppDatabase.database;
 
-    await db.update(
-      'cars',
-      car.toMap(),
-      where: 'id = ?',
-      whereArgs: [car.id],
-    );
+    await db.update('cars', car.toMap(), where: 'id = ?', whereArgs: [car.id]);
   }
 
   Future<List<Car>> getCars() async {
     final db = await AppDatabase.database;
 
-    final rows = await db.query(
-      'cars',
-      orderBy: 'id DESC',
-    );
+    final rows = await db.query('cars', orderBy: 'id DESC');
 
     return rows.map(Car.fromMap).toList();
   }
 
   Future<void> deleteCar(int id) async {
     final db = await AppDatabase.database;
+    final storageService = PhotoStorageService();
 
     await db.transaction((transaction) async {
       await transaction.delete(
@@ -62,11 +53,15 @@ class CarRepository {
       );
 
       await transaction.delete(
-        'cars',
-        where: 'id = ?',
+        'car_photos',
+        where: 'carId = ?',
         whereArgs: [id],
       );
+
+      await transaction.delete('cars', where: 'id = ?', whereArgs: [id]);
     });
+
+    await storageService.deleteCarPhotos(id);
   }
 
   Future<void> updateMileageIfHigher({

@@ -5,10 +5,7 @@ class ServiceEntryRepository {
   Future<int> insertEntry(ServiceEntry entry) async {
     final db = await AppDatabase.database;
 
-    return db.insert(
-      'service_entries',
-      entry.toMap(),
-    );
+    return db.insert('service_entries', entry.toMap());
   }
 
   Future<void> updateEntry(ServiceEntry entry) async {
@@ -38,10 +35,6 @@ class ServiceEntryRepository {
   Future<void> deleteEntry(int id) async {
     final db = await AppDatabase.database;
 
-    await db.delete(
-      'service_entries',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    await db.delete('service_entries', where: 'id = ?', whereArgs: [id]);
   }
 }

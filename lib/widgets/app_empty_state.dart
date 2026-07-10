@@ -22,25 +22,12 @@ class AppEmptyState extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            icon,
-            size: 46,
-            color: Theme.of(context).colorScheme.primary,
-          ),
+          Icon(icon, size: 46, color: Theme.of(context).colorScheme.primary),
           const SizedBox(height: 14),
-          Text(
-            title,
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
+          Text(title, style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 8),
-          Text(
-            message,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          if (action != null) ...[
-            const SizedBox(height: 18),
-            action!,
-          ],
+          Text(message, style: Theme.of(context).textTheme.bodyMedium),
+          if (action != null) ...[const SizedBox(height: 18), action!],
         ],
       ),
     );

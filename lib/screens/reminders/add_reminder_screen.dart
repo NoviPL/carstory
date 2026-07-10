@@ -10,11 +10,7 @@ class AddReminderScreen extends StatefulWidget {
   final Car car;
   final CarReminder? reminder;
 
-  const AddReminderScreen({
-    super.key,
-    required this.car,
-    this.reminder,
-  });
+  const AddReminderScreen({super.key, required this.car, this.reminder});
 
   @override
   State<AddReminderScreen> createState() => _AddReminderScreenState();
@@ -55,8 +51,7 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
       _dateController.text = reminder.dueDate ?? '';
       _mileageController.text = reminder.dueMileage?.toString() ?? '';
       _noteController.text = reminder.note;
-      _selectedType =
-          _types.contains(reminder.type) ? reminder.type : 'Inne';
+      _selectedType = _types.contains(reminder.type) ? reminder.type : 'Inne';
       _useDate = reminder.dueDate != null;
       _useMileage = reminder.dueMileage != null;
     }
@@ -104,8 +99,7 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
   Future<void> _pickDate() async {
     final now = DateTime.now();
 
-    final initialDate =
-        DateTime.tryParse(_dateController.text) ?? now;
+    final initialDate = DateTime.tryParse(_dateController.text) ?? now;
 
     final pickedDate = await showDatePicker(
       context: context,
@@ -125,9 +119,7 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
     if (!_useDate && !_useMileage) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text(
-            'Wybierz termin według daty, przebiegu albo obu.',
-          ),
+          content: Text('Wybierz termin według daty, przebiegu albo obu.'),
         ),
       );
       return;
@@ -135,9 +127,7 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
 
     if (_useDate && _dateController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Wybierz datę przypomnienia.'),
-        ),
+        const SnackBar(content: Text('Wybierz datę przypomnienia.')),
       );
       return;
     }
@@ -162,8 +152,7 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
           : null,
       note: _noteController.text.trim(),
       isCompleted: existing?.isCompleted ?? false,
-      createdAt:
-          existing?.createdAt ?? DateTime.now().toIso8601String(),
+      createdAt: existing?.createdAt ?? DateTime.now().toIso8601String(),
     );
 
     if (existing == null) {
@@ -190,15 +179,10 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
           children: [
             DropdownButtonFormField<String>(
               initialValue: _selectedType,
-              decoration: const InputDecoration(
-                labelText: 'Typ przypomnienia',
-              ),
+              decoration: const InputDecoration(labelText: 'Typ przypomnienia'),
               items: _types
                   .map(
-                    (type) => DropdownMenuItem(
-                      value: type,
-                      child: Text(type),
-                    ),
+                    (type) => DropdownMenuItem(value: type, child: Text(type)),
                   )
                   .toList(),
               onChanged: (value) {
@@ -207,8 +191,7 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
                 setState(() {
                   _selectedType = value;
 
-                  if (_titleController.text.trim().isEmpty &&
-                      value != 'Inne') {
+                  if (_titleController.text.trim().isEmpty && value != 'Inne') {
                     _titleController.text = value;
                   }
                 });
@@ -273,17 +256,15 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
             TextFormField(
               controller: _noteController,
               maxLines: 4,
-              decoration: const InputDecoration(
-                labelText: 'Notatka',
-              ),
+              decoration: const InputDecoration(labelText: 'Notatka'),
             ),
             const SizedBox(height: 24),
             AppButton(
               text: _isSaving
                   ? 'Zapisywanie...'
                   : widget.reminder == null
-                      ? 'Zapisz przypomnienie'
-                      : 'Zapisz zmiany',
+                  ? 'Zapisz przypomnienie'
+                  : 'Zapisz zmiany',
               icon: Icons.save,
               onPressed: _isSaving ? null : _saveReminder,
             ),

@@ -10,11 +10,7 @@ class AddExpenseScreen extends StatefulWidget {
   final Car car;
   final ExpenseEntry? entry;
 
-  const AddExpenseScreen({
-    super.key,
-    required this.car,
-    this.entry,
-  });
+  const AddExpenseScreen({super.key, required this.car, this.entry});
 
   @override
   State<AddExpenseScreen> createState() => _AddExpenseScreenState();
@@ -83,9 +79,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   }
 
   double? _parseAmount(String value) {
-    return double.tryParse(
-      value.trim().replaceAll(',', '.'),
-    );
+    return double.tryParse(value.trim().replaceAll(',', '.'));
   }
 
   String? _requiredValidator(String? value) {
@@ -149,8 +143,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       amount: _parseAmount(_amountController.text)!,
       date: _dateController.text.trim(),
       note: _noteController.text.trim(),
-      createdAt:
-          existingEntry?.createdAt ?? DateTime.now().toIso8601String(),
+      createdAt: existingEntry?.createdAt ?? DateTime.now().toIso8601String(),
     );
 
     if (existingEntry == null) {
@@ -184,9 +177,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
             const SizedBox(height: 12),
             DropdownButtonFormField<String>(
               initialValue: _selectedCategory,
-              decoration: const InputDecoration(
-                labelText: 'Kategoria',
-              ),
+              decoration: const InputDecoration(labelText: 'Kategoria'),
               items: _categories
                   .map(
                     (category) => DropdownMenuItem(
@@ -240,8 +231,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               text: _isSaving
                   ? 'Zapisywanie...'
                   : widget.entry == null
-                      ? 'Zapisz koszt'
-                      : 'Zapisz zmiany',
+                  ? 'Zapisz koszt'
+                  : 'Zapisz zmiany',
               icon: Icons.save,
               onPressed: _isSaving ? null : _saveEntry,
             ),

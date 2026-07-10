@@ -14,10 +14,7 @@ import 'add_service_entry_screen.dart';
 class ServiceHistoryScreen extends StatefulWidget {
   final Car car;
 
-  const ServiceHistoryScreen({
-    super.key,
-    required this.car,
-  });
+  const ServiceHistoryScreen({super.key, required this.car});
 
   @override
   State<ServiceHistoryScreen> createState() => _ServiceHistoryScreenState();
@@ -55,10 +52,7 @@ class _ServiceHistoryScreenState extends State<ServiceHistoryScreen> {
     final result = await Navigator.push<bool>(
       currentContext,
       MaterialPageRoute(
-        builder: (_) => AddServiceEntryScreen(
-          car: widget.car,
-          entry: entry,
-        ),
+        builder: (_) => AddServiceEntryScreen(car: widget.car, entry: entry),
       ),
     );
 
@@ -95,10 +89,7 @@ class _ServiceHistoryScreenState extends State<ServiceHistoryScreen> {
 
     if (!currentContext.mounted) return;
 
-    showAppSnackBar(
-      context: currentContext,
-      message: 'Wpis został usunięty.',
-    );
+    showAppSnackBar(context: currentContext, message: 'Wpis został usunięty.');
   }
 
   @override
@@ -146,10 +137,9 @@ class _ServiceHistoryScreenState extends State<ServiceHistoryScreen> {
                           width: 54,
                           height: 54,
                           decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withValues(alpha: 0.14),
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primary.withValues(alpha: 0.14),
                             borderRadius: BorderRadius.circular(18),
                           ),
                           child: Icon(
@@ -164,9 +154,7 @@ class _ServiceHistoryScreenState extends State<ServiceHistoryScreen> {
                             children: [
                               Text(
                                 entry.title,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
+                                style: Theme.of(context).textTheme.titleMedium
                                     ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 4),
@@ -177,13 +165,11 @@ class _ServiceHistoryScreenState extends State<ServiceHistoryScreen> {
                               const SizedBox(height: 4),
                               Text(
                                 '${entry.mileage} km • ${entry.cost.toStringAsFixed(2)} zł',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
+                                style: Theme.of(context).textTheme.bodySmall
                                     ?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurfaceVariant,
                                     ),
                               ),
                             ],

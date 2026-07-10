@@ -5,10 +5,7 @@ class ExpenseEntryRepository {
   Future<int> insertEntry(ExpenseEntry entry) async {
     final db = await AppDatabase.database;
 
-    return db.insert(
-      'expense_entries',
-      entry.toMap(),
-    );
+    return db.insert('expense_entries', entry.toMap());
   }
 
   Future<void> updateEntry(ExpenseEntry entry) async {
@@ -38,10 +35,6 @@ class ExpenseEntryRepository {
   Future<void> deleteEntry(int id) async {
     final db = await AppDatabase.database;
 
-    await db.delete(
-      'expense_entries',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    await db.delete('expense_entries', where: 'id = ?', whereArgs: [id]);
   }
 }

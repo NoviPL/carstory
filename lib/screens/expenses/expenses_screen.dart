@@ -14,10 +14,7 @@ import 'add_expense_screen.dart';
 class ExpensesScreen extends StatefulWidget {
   final Car car;
 
-  const ExpensesScreen({
-    super.key,
-    required this.car,
-  });
+  const ExpensesScreen({super.key, required this.car});
 
   @override
   State<ExpensesScreen> createState() => _ExpensesScreenState();
@@ -30,18 +27,14 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
   bool _isLoading = true;
 
   double get _totalAmount {
-    return _entries.fold(
-      0,
-      (sum, entry) => sum + entry.amount,
-    );
+    return _entries.fold(0, (sum, entry) => sum + entry.amount);
   }
 
   Map<String, double> get _amountByCategory {
     final result = <String, double>{};
 
     for (final entry in _entries) {
-      result[entry.category] =
-          (result[entry.category] ?? 0) + entry.amount;
+      result[entry.category] = (result[entry.category] ?? 0) + entry.amount;
     }
 
     return result;
@@ -83,10 +76,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
     final result = await Navigator.push<bool>(
       currentContext,
       MaterialPageRoute(
-        builder: (_) => AddExpenseScreen(
-          car: widget.car,
-          entry: entry,
-        ),
+        builder: (_) => AddExpenseScreen(car: widget.car, entry: entry),
       ),
     );
 
@@ -124,10 +114,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
 
     if (!currentContext.mounted) return;
 
-    showAppSnackBar(
-      context: currentContext,
-      message: 'Koszt został usunięty.',
-    );
+    showAppSnackBar(context: currentContext, message: 'Koszt został usunięty.');
   }
 
   IconData _categoryIcon(String category) {
@@ -161,23 +148,20 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            icon,
-            color: Theme.of(context).colorScheme.primary,
-          ),
+          Icon(icon, color: Theme.of(context).colorScheme.primary),
           const SizedBox(height: 10),
           Text(
             value,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 3),
           Text(
             label,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
         ],
       ),
@@ -210,10 +194,9 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                   children: [
                     Text(
                       'Podsumowanie kosztów',
-                      style:
-                          Theme.of(context).textTheme.titleLarge?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 20),
                     Row(
@@ -283,10 +266,9 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                           width: 54,
                           height: 54,
                           decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withValues(alpha: 0.14),
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primary.withValues(alpha: 0.14),
                             borderRadius: BorderRadius.circular(18),
                           ),
                           child: Icon(
@@ -301,12 +283,8 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                             children: [
                               Text(
                                 entry.title,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
-                                    ?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                style: Theme.of(context).textTheme.titleMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 4),
                               Text(
@@ -316,13 +294,11 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                               const SizedBox(height: 4),
                               Text(
                                 '${entry.amount.toStringAsFixed(2)} zł',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
+                                style: Theme.of(context).textTheme.bodySmall
                                     ?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurfaceVariant,
                                     ),
                               ),
                               if (entry.note.isNotEmpty) ...[
@@ -331,8 +307,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                                   entry.note,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
-                                  style:
-                                      Theme.of(context).textTheme.bodySmall,
+                                  style: Theme.of(context).textTheme.bodySmall,
                                 ),
                               ],
                             ],

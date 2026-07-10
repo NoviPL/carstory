@@ -12,11 +12,7 @@ class AddFuelEntryScreen extends StatefulWidget {
   final Car car;
   final FuelEntry? entry;
 
-  const AddFuelEntryScreen({
-    super.key,
-    required this.car,
-    this.entry,
-  });
+  const AddFuelEntryScreen({super.key, required this.car, this.entry});
 
   @override
   State<AddFuelEntryScreen> createState() => _AddFuelEntryScreenState();
@@ -51,8 +47,7 @@ class _AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
     if (entry != null) {
       _mileageController.text = entry.mileage.toString();
       _litersController.text = entry.liters.toStringAsFixed(2);
-      _pricePerLiterController.text =
-          entry.pricePerLiter.toStringAsFixed(2);
+      _pricePerLiterController.text = entry.pricePerLiter.toStringAsFixed(2);
       _dateController.text = entry.date;
       _totalCost = entry.totalCost;
       _isFullTank = entry.isFullTank;
@@ -82,15 +77,12 @@ class _AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
   }
 
   double? _parseDouble(String value) {
-    return double.tryParse(
-      value.trim().replaceAll(',', '.'),
-    );
+    return double.tryParse(value.trim().replaceAll(',', '.'));
   }
 
   void _calculateTotalCost() {
     final liters = _parseDouble(_litersController.text) ?? 0;
-    final pricePerLiter =
-        _parseDouble(_pricePerLiterController.text) ?? 0;
+    final pricePerLiter = _parseDouble(_pricePerLiterController.text) ?? 0;
 
     final calculatedCost = liters * pricePerLiter;
 
@@ -144,8 +136,7 @@ class _AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
   Future<void> _pickDate() async {
     final now = DateTime.now();
 
-    final initialDate =
-        DateTime.tryParse(_dateController.text) ?? now;
+    final initialDate = DateTime.tryParse(_dateController.text) ?? now;
 
     final pickedDate = await showDatePicker(
       context: context,
@@ -170,17 +161,11 @@ class _AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
       _isSaving = true;
     });
 
-    final mileage = int.parse(
-      _mileageController.text.trim(),
-    );
+    final mileage = int.parse(_mileageController.text.trim());
 
-    final liters = _parseDouble(
-      _litersController.text,
-    )!;
+    final liters = _parseDouble(_litersController.text)!;
 
-    final pricePerLiter = _parseDouble(
-      _pricePerLiterController.text,
-    )!;
+    final pricePerLiter = _parseDouble(_pricePerLiterController.text)!;
 
     final totalCost = liters * pricePerLiter;
 
@@ -194,8 +179,7 @@ class _AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
       pricePerLiter: pricePerLiter,
       totalCost: totalCost,
       date: _dateController.text.trim(),
-      createdAt:
-          existingEntry?.createdAt ?? DateTime.now().toIso8601String(),
+      createdAt: existingEntry?.createdAt ?? DateTime.now().toIso8601String(),
       isFullTank: _isFullTank,
     );
 
@@ -205,10 +189,7 @@ class _AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
       await _repository.updateEntry(entry);
     }
 
-    await _carRepository.updateMileageIfHigher(
-      carId: carId,
-      mileage: mileage,
-    );
+    await _carRepository.updateMileageIfHigher(carId: carId, mileage: mileage);
 
     if (!mounted) return;
 
@@ -226,19 +207,14 @@ class _AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
       controller: controller,
       validator: validator,
       keyboardType: keyboardType,
-      decoration: InputDecoration(
-        labelText: label,
-        suffixText: suffixText,
-      ),
+      decoration: InputDecoration(labelText: label, suffixText: suffixText),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      title: widget.entry == null
-          ? 'Nowe tankowanie'
-          : 'Edytuj tankowanie',
+      title: widget.entry == null ? 'Nowe tankowanie' : 'Edytuj tankowanie',
       body: Form(
         key: _formKey,
         child: ListView(
@@ -317,12 +293,8 @@ class _AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
                         const SizedBox(height: 4),
                         Text(
                           '${_totalCost.toStringAsFixed(2)} zł',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall
-                              ?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                          style: Theme.of(context).textTheme.headlineSmall
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -335,8 +307,8 @@ class _AddFuelEntryScreenState extends State<AddFuelEntryScreen> {
               text: _isSaving
                   ? 'Zapisywanie...'
                   : widget.entry == null
-                      ? 'Zapisz tankowanie'
-                      : 'Zapisz zmiany',
+                  ? 'Zapisz tankowanie'
+                  : 'Zapisz zmiany',
               icon: Icons.save,
               onPressed: _isSaving ? null : _saveEntry,
             ),

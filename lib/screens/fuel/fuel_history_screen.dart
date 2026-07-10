@@ -14,10 +14,7 @@ import 'add_fuel_entry_screen.dart';
 class FuelHistoryScreen extends StatefulWidget {
   final Car car;
 
-  const FuelHistoryScreen({
-    super.key,
-    required this.car,
-  });
+  const FuelHistoryScreen({super.key, required this.car});
 
   @override
   State<FuelHistoryScreen> createState() => _FuelHistoryScreenState();
@@ -51,17 +48,11 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> {
   }
 
   double get _totalFuelCost {
-    return _entries.fold(
-      0,
-      (sum, entry) => sum + entry.totalCost,
-    );
+    return _entries.fold(0, (sum, entry) => sum + entry.totalCost);
   }
 
   double get _totalLiters {
-    return _entries.fold(
-      0,
-      (sum, entry) => sum + entry.liters,
-    );
+    return _entries.fold(0, (sum, entry) => sum + entry.liters);
   }
 
   double get _averagePricePerLiter {
@@ -125,10 +116,7 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> {
     final result = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
-        builder: (_) => AddFuelEntryScreen(
-          car: widget.car,
-          entry: entry,
-        ),
+        builder: (_) => AddFuelEntryScreen(car: widget.car, entry: entry),
       ),
     );
 
@@ -164,10 +152,7 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> {
 
     if (!mounted) return;
 
-    showAppSnackBar(
-      context: context,
-      message: 'Tankowanie zostało usunięte.',
-    );
+    showAppSnackBar(context: context, message: 'Tankowanie zostało usunięte.');
   }
 
   Widget _statItem({
@@ -180,24 +165,20 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            icon,
-            size: 22,
-            color: Theme.of(context).colorScheme.primary,
-          ),
+          Icon(icon, size: 22, color: Theme.of(context).colorScheme.primary),
           const SizedBox(height: 10),
           Text(
             value,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 3),
           Text(
             label,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
         ],
       ),
@@ -231,8 +212,8 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> {
                     Text(
                       'Podsumowanie',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 20),
                     Row(
@@ -310,7 +291,8 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> {
               const AppEmptyState(
                 icon: Icons.local_gas_station,
                 title: 'Brak tankowań',
-                message: 'Dodaj pierwsze tankowanie, aby śledzić koszty paliwa.',
+                message:
+                    'Dodaj pierwsze tankowanie, aby śledzić koszty paliwa.',
               )
             else
               ..._entries.map(
@@ -324,10 +306,9 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> {
                           width: 54,
                           height: 54,
                           decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withValues(alpha: 0.14),
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primary.withValues(alpha: 0.14),
                             borderRadius: BorderRadius.circular(18),
                           ),
                           child: Icon(
@@ -342,9 +323,7 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> {
                             children: [
                               Text(
                                 '${entry.totalCost.toStringAsFixed(2)} zł',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
+                                style: Theme.of(context).textTheme.titleMedium
                                     ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 4),
@@ -355,21 +334,22 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> {
                               const SizedBox(height: 4),
                               Text(
                                 '${entry.liters.toStringAsFixed(2)} l • ${entry.pricePerLiter.toStringAsFixed(2)} zł/l • ${entry.mileage} km',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
+                                style: Theme.of(context).textTheme.bodySmall
                                     ?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurfaceVariant,
                                     ),
                               ),
                               if (entry.isFullTank) ...[
                                 const SizedBox(height: 5),
                                 Text(
                                   'Tankowanie do pełna',
-                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                        color: Theme.of(context).colorScheme.primary,
+                                  style: Theme.of(context).textTheme.bodySmall
+                                      ?.copyWith(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
                                         fontWeight: FontWeight.w600,
                                       ),
                                 ),

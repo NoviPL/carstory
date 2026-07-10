@@ -5,10 +5,7 @@ class FuelEntryRepository {
   Future<int> insertEntry(FuelEntry entry) async {
     final db = await AppDatabase.database;
 
-    return db.insert(
-      'fuel_entries',
-      entry.toMap(),
-    );
+    return db.insert('fuel_entries', entry.toMap());
   }
 
   Future<void> updateEntry(FuelEntry entry) async {
@@ -38,10 +35,6 @@ class FuelEntryRepository {
   Future<void> deleteEntry(int id) async {
     final db = await AppDatabase.database;
 
-    await db.delete(
-      'fuel_entries',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    await db.delete('fuel_entries', where: 'id = ?', whereArgs: [id]);
   }
 }
