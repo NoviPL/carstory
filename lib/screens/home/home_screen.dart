@@ -7,11 +7,12 @@ import '../../widgets/app_card.dart';
 import '../../widgets/app_scaffold.dart';
 import '../../widgets/app_section_title.dart';
 import '../add_car/add_car_screen.dart';
-import '../car_details/car_details_screen.dart';
+// import '../car_details/car_details_screen.dart';
 import '../../widgets/app_confirm_dialog.dart';
 import '../../widgets/app_snackbar.dart';
 import '../../widgets/app_empty_state.dart';
 import '../../widgets/car_cover_thumbnail.dart';
+import '../dashboard/premium_dashboard_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -128,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       final result = await Navigator.push<bool>(
                         currentContext,
                         MaterialPageRoute(
-                          builder: (_) => CarDetailsScreen(car: car),
+                          builder: (_) => PremiumDashboardScreen(car: car),
                         ),
                       );
 

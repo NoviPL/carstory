@@ -14,6 +14,7 @@ import '../fuel/fuel_history_screen.dart';
 import '../gallery/car_gallery_screen.dart';
 import '../reminders/reminders_screen.dart';
 import '../service_history/service_history_screen.dart';
+import '../documents/documents_screen.dart';
 
 class CarDetailsScreen extends StatefulWidget {
   final Car car;
@@ -225,6 +226,12 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
             icon: Icons.description,
             title: 'Dokumenty',
             subtitle: 'Polisy, faktury i ważne pliki.',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => DocumentsScreen(car: car)),
+              );
+            },
           ),
           const SizedBox(height: 12),
           _moduleTile(

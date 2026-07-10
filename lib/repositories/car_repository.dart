@@ -1,6 +1,7 @@
 import '../database/app_database.dart';
 import '../models/car.dart';
 import '../services/photo_storage_service.dart';
+import '../services/document_storage_service.dart';
 
 class CarRepository {
   Future<int> insertCar(Car car) async {
@@ -26,6 +27,7 @@ class CarRepository {
   Future<void> deleteCar(int id) async {
     final db = await AppDatabase.database;
     final storageService = PhotoStorageService();
+    final documentStorageService = DocumentStorageService();
 
     await db.transaction((transaction) async {
       await transaction.delete(
@@ -58,10 +60,17 @@ class CarRepository {
         whereArgs: [id],
       );
 
+      await transaction.delete(
+        'vehicle_documents',
+        where: 'carId = ?',
+        whereArgs: [id],
+      );
+
       await transaction.delete('cars', where: 'id = ?', whereArgs: [id]);
     });
 
     await storageService.deleteCarPhotos(id);
+    await documentStorageService.deleteCarDocuments(id);
   }
 
   Future<void> updateMileageIfHigher({

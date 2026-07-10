@@ -2,7 +2,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class AppDatabase {
-  static const int _databaseVersion = 7;
+  static const int _databaseVersion = 8;
   static const String _databaseName = 'carstory.db';
 
   static Database? _database;
@@ -39,6 +39,7 @@ class AppDatabase {
     await _createExpenseEntriesTable(db);
     await _createRemindersTable(db);
     await _createCarPhotosTable(db);
+    await _createVehicleDocumentsTable(db);
   }
 
   static Future<void> _upgradeDatabase(
@@ -66,6 +67,9 @@ class AppDatabase {
     }
     if (oldVersion < 7) {
       await _createCarPhotosTable(db);
+    }
+    if (oldVersion < 8) {
+      await _createVehicleDocumentsTable(db);
     }
   }
 
@@ -155,6 +159,23 @@ class AppDatabase {
         filePath TEXT NOT NULL,
         caption TEXT NOT NULL,
         isCover INTEGER NOT NULL DEFAULT 0,
+        createdAt TEXT NOT NULL
+      )
+    ''');
+  }
+
+  static Future<void> _createVehicleDocumentsTable(Database db) async {
+    await db.execute('''
+      CREATE TABLE vehicle_documents (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        carId INTEGER NOT NULL,
+        title TEXT NOT NULL,
+        category TEXT NOT NULL,
+        filePath TEXT NOT NULL,
+        fileName TEXT NOT NULL,
+        fileType TEXT NOT NULL,
+        expiryDate TEXT,
+        note TEXT NOT NULL,
         createdAt TEXT NOT NULL
       )
     ''');
