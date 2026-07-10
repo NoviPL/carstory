@@ -53,32 +53,34 @@ class _CarGalleryScreenState extends State<CarGalleryScreen> {
   }
 
   Future<String?> _askCaption() async {
-    final controller = TextEditingController();
+    String caption = '';
 
-    final result = await showDialog<String>(
+    return showDialog<String>(
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
           title: const Text('Podpis zdjęcia'),
-          content: TextField(
-            controller: controller,
+          content: TextFormField(
             autofocus: true,
             maxLines: 3,
             decoration: const InputDecoration(
               labelText: 'Podpis',
               hintText: 'Opcjonalny opis zdjęcia',
             ),
+            onChanged: (value) {
+              caption = value;
+            },
           ),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(dialogContext);
+                Navigator.of(dialogContext).pop();
               },
               child: const Text('Anuluj'),
             ),
             FilledButton(
               onPressed: () {
-                Navigator.pop(dialogContext, controller.text.trim());
+                Navigator.of(dialogContext).pop(caption.trim());
               },
               child: const Text('Dodaj'),
             ),
@@ -86,10 +88,6 @@ class _CarGalleryScreenState extends State<CarGalleryScreen> {
         );
       },
     );
-
-    controller.dispose();
-
-    return result;
   }
 
   Future<void> _addPhotos() async {
@@ -109,6 +107,10 @@ class _CarGalleryScreenState extends State<CarGalleryScreen> {
       if (result == null) return;
 
       caption = result;
+
+      await Future<void>.delayed(const Duration(milliseconds: 150));
+
+      if (!mounted) return;
     }
 
     setState(() {
@@ -157,29 +159,32 @@ class _CarGalleryScreenState extends State<CarGalleryScreen> {
 
     if (id == null) return;
 
-    final controller = TextEditingController(text: photo.caption);
+    String caption = photo.caption;
 
     final result = await showDialog<String>(
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
           title: const Text('Edytuj podpis'),
-          content: TextField(
-            controller: controller,
+          content: TextFormField(
+            initialValue: photo.caption,
             autofocus: true,
             maxLines: 3,
             decoration: const InputDecoration(labelText: 'Podpis zdjęcia'),
+            onChanged: (value) {
+              caption = value;
+            },
           ),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(dialogContext);
+                Navigator.of(dialogContext).pop();
               },
               child: const Text('Anuluj'),
             ),
             FilledButton(
               onPressed: () {
-                Navigator.pop(dialogContext, controller.text.trim());
+                Navigator.of(dialogContext).pop(caption.trim());
               },
               child: const Text('Zapisz'),
             ),
@@ -187,8 +192,6 @@ class _CarGalleryScreenState extends State<CarGalleryScreen> {
         );
       },
     );
-
-    controller.dispose();
 
     if (result == null) return;
 
